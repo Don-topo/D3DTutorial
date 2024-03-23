@@ -1,74 +1,59 @@
 #include "Window/Window.h"
-#include "Renderer/Renderer.h"
+#include "Renderer/RendererManager.h"
+#include "Object/Object.h"
+#include <vector>
 
-struct VertexData
-{
-	XMFLOAT3 position;
-	XMFLOAT4 color;
-};
-
-VertexData vertices[] =
+std::vector<VertexData> vertices1 =
 {
 	{ XMFLOAT3(-0.5f, -0.5f, 0.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
 	{ XMFLOAT3(0.0f, 0.5f, 0.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
 	{ XMFLOAT3(0.5f, -0.5f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) }
 };
 
-uint32_t indices[] =
+std::vector<VertexData> vertices2 =
+{
+	{ XMFLOAT3(0.5f, 0.0f, 0.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
+	{ XMFLOAT3(0.7f, 0.5f, 0.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+	{ XMFLOAT3(0.9f, 0.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) }
+};
+
+std::vector<uint32_t> indices1 =
 {
 	0, 1, 2
 };
 
+
 int main()
 {
+	// OBJECTS ARRAY
+	std::vector<Object*> objects;
+
+	// BASIC WINDOW INITIALIZATION
 	Window* basicWindow = new Window({ 1280, 720 }, "Basic Window");	
 	basicWindow->Inicialize();
 
-	Renderer* basicRenderer = new Renderer(basicWindow);
+	// BASIC RENDERER INITIALIZATION
+	Renderer* basicRenderer = RendererManager::CreateRenderer(basicWindow);
 
-	ComPtr<ID3D11Buffer> vertexBuffer;
-	D3D11_BUFFER_DESC vertexBufferDesc = {};
-	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(VertexData) * 3;
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufferDesc.CPUAccessFlags = 0;
-	vertexBufferDesc.MiscFlags = 0;
+	Object* triangle = new Object(vertices1, indices1);
+	objects.push_back(triangle);
 
-	D3D11_SUBRESOURCE_DATA vertexSubresourceData = {};
-	vertexSubresourceData.pSysMem = vertices;
-	vertexSubresourceData.SysMemPitch = 0;
-	vertexSubresourceData.SysMemSlicePitch = 0;
+	Object* triangle2 = new Object(vertices2, indices1);
+	objects.push_back(triangle2);
 
-	basicRenderer->GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, vertexBuffer.GetAddressOf());
-
-	ComPtr<ID3D11Buffer> indexBuffer;
-	D3D11_BUFFER_DESC indexBufferDesc = {};
-	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(uint32_t) * 3;
-	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufferDesc.CPUAccessFlags = 0;
-	indexBufferDesc.MiscFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA indexSubresourceData = {};
-	indexSubresourceData.pSysMem = indices;
-	indexSubresourceData.SysMemPitch = 0;
-	indexSubresourceData.SysMemSlicePitch = 0;
-
-	basicRenderer->GetDevice()->CreateBuffer(&indexBufferDesc, &indexSubresourceData, indexBuffer.GetAddressOf());
-
-	uint32_t stride = sizeof(VertexData);
-	uint32_t offset = 0;
-
-
-	basicRenderer->GetDeviceContext()->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
-	basicRenderer->GetDeviceContext()->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-
+	// BASIC RENDER LOOP
 	while (basicWindow->IsVisible())
 	{
 		basicWindow->Run();
 		basicRenderer->ClearColor({ 0.5f, 0.2f, 0.6f, 1.0f });
 		basicRenderer->SetPipeline();
-		basicRenderer->Draw(3);
+
+		for (auto& object : objects)
+		{
+			object->SetProps();
+			basicRenderer->Draw(object->GetIndexCount());
+		}
+
 		basicRenderer->Present();
 	}
 
