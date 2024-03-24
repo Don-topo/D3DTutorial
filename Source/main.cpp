@@ -4,21 +4,14 @@
 #include "Object/Camera.h"
 #include <vector>
 
-std::vector<VertexData> vertices1 =
+std::vector<VertexData> vertices =
 {
 	{ XMFLOAT3(-0.5f, -0.5f, 0.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
 	{ XMFLOAT3(0.0f, 0.5f, 0.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
 	{ XMFLOAT3(0.5f, -0.5f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) }
 };
 
-std::vector<VertexData> vertices2 =
-{
-	{ XMFLOAT3(0.5f, 0.0f, 0.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-	{ XMFLOAT3(0.7f, 0.5f, 0.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-	{ XMFLOAT3(0.9f, 0.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) }
-};
-
-std::vector<uint32_t> indices1 =
+std::vector<uint32_t> indices =
 {
 	0, 1, 2
 };
@@ -37,10 +30,11 @@ int main()
 	Renderer* basicRenderer = RendererManager::CreateRenderer(basicWindow);
 	Camera* basicCamera = new Camera({ 0.0f, 0.0f, -3.0f });
 
-	Object* triangle = new Object(vertices1, indices1);
+	Object* triangle = new Object(vertices, indices);
 	objects.push_back(triangle);
 
-	Object* triangle2 = new Object(vertices2, indices1);
+	Object* triangle2 = new Object(vertices, indices);
+	triangle2->SetPosition({ 3.0f, 2.0f, 0.0f });
 	objects.push_back(triangle2);
 
 	// BASIC RENDER LOOP

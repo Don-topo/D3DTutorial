@@ -71,6 +71,8 @@ void Object::SetProps()
 
 void Object::UpdateMatrix(XMMATRIX view, XMMATRIX projection)
 {
+	mWorldData.rotation.z += 0.1f;
+
 	mTransformData.world = XMMatrixTranspose(XMMatrixScaling(mWorldData.scale.x, mWorldData.scale.y, mWorldData.scale.z) *
 		XMMatrixRotationRollPitchYaw(XMConvertToRadians(mWorldData.rotation.x), XMConvertToRadians(mWorldData.rotation.y), XMConvertToRadians(mWorldData.rotation.z)) *
 		XMMatrixTranslation(mWorldData.position.x, mWorldData.position.y, mWorldData.position.z));

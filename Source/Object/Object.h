@@ -11,7 +11,9 @@ public:
 	~Object() = default;
 
 	void SetProps();
-	void SetWorldData(WorldData worldData) { mWorldData = worldData; }
+	void SetPosition(XMFLOAT3 position) { mWorldData.position = position; }
+	void SetRotation(XMFLOAT3 rotation) { mWorldData.rotation = rotation; }
+	void SetScale(XMFLOAT3 scale) { mWorldData.scale = scale; }
 	void UpdateMatrix(XMMATRIX view, XMMATRIX projection);
 
 	uint32_t GetIndexCount() const { return mIndexCount; }

@@ -19,14 +19,15 @@ Camera::Camera()
 XMMATRIX Camera::GetViewMatrix()
 {
 	XMVECTOR position = XMLoadFloat3(&mPosition);
-	XMVECTOR target = XMLoadFloat3(&mFront);
+	XMVECTOR front = XMLoadFloat3(&mFront);
 	XMVECTOR up = XMLoadFloat3(&mUp);
 	XMVECTOR right = XMLoadFloat3(&mRight);
 
-	XMVECTOR direction = XMVectorSubtract(target, position);
-	direction = XMVector3Normalize(direction);
+	XMVECTOR eyeDirection = position * front;
+	
+	XMMATRIX viewMatrix = XMMatrixLookAtLH(position, eyeDirection, -up);
 
-	return XMMatrixLookAtLH(position, direction, up);
+	return viewMatrix;
 }
 
 XMMATRIX Camera::GetProjectionMatrix()
