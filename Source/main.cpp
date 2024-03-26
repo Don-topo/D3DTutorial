@@ -1,19 +1,43 @@
 #include "Window/Window.h"
 #include "Renderer/RendererManager.h"
+
 #include "Object/Object.h"
 #include "Object/Camera.h"
+
 #include <vector>
 
 std::vector<VertexData> vertices =
 {
-	{ XMFLOAT3(-0.5f, -0.5f, 0.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-	{ XMFLOAT3(0.0f, 0.5f, 0.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-	{ XMFLOAT3(0.5f, -0.5f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) }
+	{ {-0.5f, -0.5f, -0.5f}, { 1.0f, 0.0f, 0.0f, 1.0f} },
+	{ {-0.5f, 0.5f, -0.5f},  { 0.0f, 1.0f, 0.0f, 1.0f} },
+	{ {0.5f, 0.5f, -0.5f},   { 0.0f, 0.0f, 1.0f, 1.0f} },
+	{ {0.5f, -0.5f, -0.5f},  { 1.0f, 1.0f, 0.0f, 1.0f} },
+
+	{ {-0.5f, -0.5f, 0.5f}, { 1.0f, 1.0f, 1.0f, 1.0f} },
+	{ {-0.5f,  0.5f, 0.5f}, { 0.0f, 1.0f, 1.0f, 1.0f} },
+	{ {0.5f,   0.5f, 0.5f}, { 1.0f, 0.0f, 1.0f, 1.0f} },
+	{ {0.5f,  -0.5f, 0.5f}, { 0.5f, 0.5f, 0.5f, 1.0f} }
 };
 
 std::vector<uint32_t> indices =
 {
-	0, 1, 2
+	0, 1, 3,
+	1, 2, 3,
+
+	7, 5, 4,
+	7, 6, 5,
+
+	4, 5, 1,
+	4, 1, 0,
+
+	3, 2, 6,
+	3, 6, 7,
+
+	1, 5, 6,
+	1, 6, 2,
+
+	0, 3, 7,
+	0, 7, 4
 };
 
 
@@ -28,21 +52,22 @@ int main()
 
 	// BASIC RENDERER INITIALIZATION
 	Renderer* basicRenderer = RendererManager::CreateRenderer(basicWindow);
-	Camera* basicCamera = new Camera({ 0.0f, 0.0f, -3.0f });
 
-	Object* triangle = new Object(vertices, indices);
-	objects.push_back(triangle);
+	Camera* basicCamera = new Camera({ 0.0f, 0.0f, 3.0f }, { basicWindow->GetSize().X, basicWindow->GetSize().Y });
 
-	Object* triangle2 = new Object(vertices, indices);
-	triangle2->SetPosition({ 3.0f, 2.0f, 0.0f });
-	objects.push_back(triangle2);
+	Object* cube = new Object(vertices, indices);
+	objects.push_back(cube);
+
 
 	// BASIC RENDER LOOP
 	while (basicWindow->IsVisible())
 	{
 		basicWindow->Run();
 		basicRenderer->ClearColor({ 0.5f, 0.2f, 0.6f, 1.0f });
-		basicCamera->ProcessTransformPosition(basicWindow->GetWindowhandler());
+
+		basicCamera->HandleInputs(basicWindow->GetWindowhandler());
+		basicCamera->UpdateMatrix();
+
 		basicRenderer->SetPipeline();
 
 		for (auto& object : objects)
@@ -55,7 +80,6 @@ int main()
 		basicRenderer->Present();
 	}
 
-	delete basicCamera;
 	delete basicWindow;
 	delete basicRenderer;
 

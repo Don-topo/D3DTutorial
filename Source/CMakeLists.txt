@@ -9,7 +9,7 @@ FetchContent_MakeAvailable(glfw)
 # CREATE EXECUTABLE
 file(GLOB_RECURSE SUBDIRECTORIES "${CMAKE_SOURCE_DIR}/Source/*.h" "${CMAKE_SOURCE_DIR}/Source/*.cpp")
 source_group("Source" "${CMAKE_SOURCE_DIR}/Source" ${SUBDIRECTORIES})
-add_executable ("Source" main.cpp ${SUBDIRECTORIES} "Object/Object.h" "Object/Object.cpp" "Renderer/RendererManager.h" "Object/Camera.h" "Object/DataStructures.h" "Object/Camera.cpp")
+add_executable ("Source" main.cpp ${SUBDIRECTORIES} "Object/Object.h" "Object/Object.cpp" "Renderer/RendererManager.h" "Object/Camera.h" "Object/DataStructures.h" )
 
 # INCLUDE DIRECTORIES AND LINK LIBRARIES
 target_include_directories("Source" PRIVATE "${CMAKE_SOURCE_DIR}/Source")

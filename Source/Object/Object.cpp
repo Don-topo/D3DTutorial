@@ -20,7 +20,7 @@ Object::Object(std::vector<VertexData> pArrayVertexData, std::vector<uint32_t> i
 
 	D3D11_BUFFER_DESC vertexBufferDesc = {};
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(VertexData) * 3;
+	vertexBufferDesc.ByteWidth = sizeof(VertexData) * pArrayVertexData.size();
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
@@ -34,7 +34,7 @@ Object::Object(std::vector<VertexData> pArrayVertexData, std::vector<uint32_t> i
 
 	D3D11_BUFFER_DESC indexBufferDesc = {};
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(uint32_t) * 3;
+	indexBufferDesc.ByteWidth = sizeof(uint32_t) * indexData.size();
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags = 0;
@@ -71,8 +71,6 @@ void Object::SetProps()
 
 void Object::UpdateMatrix(XMMATRIX view, XMMATRIX projection)
 {
-	mWorldData.rotation.z += 0.1f;
-
 	mTransformData.world = XMMatrixTranspose(XMMatrixScaling(mWorldData.scale.x, mWorldData.scale.y, mWorldData.scale.z) *
 		XMMatrixRotationRollPitchYaw(XMConvertToRadians(mWorldData.rotation.x), XMConvertToRadians(mWorldData.rotation.y), XMConvertToRadians(mWorldData.rotation.z)) *
 		XMMatrixTranslation(mWorldData.position.x, mWorldData.position.y, mWorldData.position.z));
