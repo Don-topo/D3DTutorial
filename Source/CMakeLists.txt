@@ -5,14 +5,20 @@ include("${CMAKE_SOURCE_DIR}/Scripts/FetchLibraries.cmake")
 
 # POPULATE 3RD PARTY LIBRARIES
 FetchContent_MakeAvailable(glfw)
+FetchContent_MakeAvailable(stbi)
 
 # CREATE EXECUTABLE
 file(GLOB_RECURSE SUBDIRECTORIES "${CMAKE_SOURCE_DIR}/Source/*.h" "${CMAKE_SOURCE_DIR}/Source/*.cpp")
 source_group("Source" "${CMAKE_SOURCE_DIR}/Source" ${SUBDIRECTORIES})
-add_executable ("Source" main.cpp ${SUBDIRECTORIES} "Object/Object.h" "Object/Object.cpp" "Renderer/RendererManager.h" "Object/Camera.h" "Object/DataStructures.h" )
+add_executable ("Source" main.cpp ${SUBDIRECTORIES} "Object/Object.h" "Object/Object.cpp" "Renderer/RendererManager.h" "Object/Camera.h" "Object/DataStructures.h"  "Object/Cube.h" "Object/Cube.cpp")
 
 # INCLUDE DIRECTORIES AND LINK LIBRARIES
 target_include_directories("Source" PRIVATE "${CMAKE_SOURCE_DIR}/Source")
+
+if(stbi_POPULATED)
+	target_include_directories("Source" PRIVATE "${stbi_SOURCE_DIR}")
+	target_compile_definitions("Source" PUBLIC STB_IMAGE_IMPLEMENTATION=1)
+endif()
 
 target_link_libraries("Source" PRIVATE glfw)
 target_link_libraries("Source" PRIVATE d3d11.lib)
