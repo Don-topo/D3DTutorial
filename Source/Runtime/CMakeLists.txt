@@ -10,15 +10,16 @@ FetchContent_MakeAvailable(stbi)
 # CREATE EXECUTABLE
 file(GLOB_RECURSE SUBDIRECTORIES "${CMAKE_SOURCE_DIR}/Source/Runtime/*.h" "${CMAKE_SOURCE_DIR}/Source/Runtime/*.cpp")
 source_group("Runtime" "${CMAKE_SOURCE_DIR}/Source/Runtime" ${SUBDIRECTORIES})
-add_library ("Runtime" STATIC main.cpp ${SUBDIRECTORIES} "Window/Window.h" "Window/Window.cpp" "Core/Core.h" "Core/Core.cpp")
+add_library ("Runtime" STATIC main.cpp ${SUBDIRECTORIES} "Window/Window.h" "Window/Window.cpp" "Core/Core.h" "Core/Core.cpp" "Graphics/Device/GraphicsDevice.cpp" "Graphics/Swapchain/Swapchain.h" "Graphics/Swapchain/Swapchain.cpp" "Graphics/Framebuffer/Framebuffer.h" "Graphics/Framebuffer/Framebuffer.cpp" "Graphics/Framebuffer/FramebufferView.h" "Graphics/Framebuffer/FramebufferView.cpp" "Graphics/Framebuffer/FramebufferDesc.h"  "Graphics/Framebuffer/FramebufferViewDesc.h" "Graphics/Swapchain/SwapchainDesc.h" "Graphics/Texture/TextureFormat.h")
 
 # INCLUDE DIRECTORIES AND LINK LIBRARIES
 target_include_directories("Runtime" PRIVATE "${CMAKE_SOURCE_DIR}/Source")
 
-target_link_libraries("Runtime" PRIVATE glfw)
-target_link_libraries("Runtime" PRIVATE d3d11.lib)
-target_link_libraries("Runtime" PRIVATE d3dcompiler.lib)
-target_link_libraries("Runtime" PRIVATE dxguid.lib)
+target_link_libraries("Runtime" PUBLIC glfw)
+target_link_libraries("Runtime" PUBLIC d3d11.lib)
+target_link_libraries("Runtime" PUBLIC dxgi.lib)
+target_link_libraries("Runtime" PUBLIC d3dcompiler.lib)
+target_link_libraries("Runtime" PUBLIC dxguid.lib)
 
 # DEBUG AND RELEASE FLAGS
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")

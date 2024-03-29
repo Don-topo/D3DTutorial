@@ -24,6 +24,7 @@ class Pipeline;
 class Sampler;
 class CommandList;
 class GraphicsBuffer;
+class ResourceLayout;
 
 struct SwapchainDesc;
 struct FramebufferDesc;
@@ -35,14 +36,32 @@ struct PipelineDesc;
 struct SamplerDesc;
 struct CommandListDesc;
 struct GraphicsBufferDesc;
+struct ResourceLayoutDesc;
 
-class RUNTIME_API GraphicsDevice : std::enable_shared_from_this<GraphicsDevice>
+class GraphicsDevice : public std::enable_shared_from_this<GraphicsDevice>
 {
 public:
 	GraphicsDevice(const GraphicsDeviceDesc& desc);
 	GraphicsDevice(const GraphicsDevice&) = delete;
 	GraphicsDevice& operator=(const GraphicsDevice&) = delete;
-	virtual ~GraphicsDevice() = default;
+	~GraphicsDevice() = default;
+
+	std::shared_ptr<Swapchain> CreateSwapchain(const SwapchainDesc& desc);
+	std::shared_ptr<Framebuffer> CreateFramebuffer(const FramebufferDesc& desc);
+	std::shared_ptr<FramebufferView> CreateFramebufferView(const FramebufferViewDesc& desc);
+	std::shared_ptr<Texture> CreateTexture(const TextureDesc& desc);
+	std::shared_ptr<TextureView> CreateTextureView(const TextureViewDesc& desc);
+	std::shared_ptr<Shader> CreateShader(const ShaderDesc& desc);
+	std::shared_ptr<Pipeline> CreatePipeline(const PipelineDesc& desc);
+	std::shared_ptr<Sampler> CreateSampler(const SamplerDesc& desc);
+	std::shared_ptr<CommandList> CreateCommandList(const CommandListDesc& desc);
+	std::shared_ptr<GraphicsBuffer> CreateGraphicsBuffer(const GraphicsBufferDesc& desc);
+	std::shared_ptr<ResourceLayout> CreateResourceLayout(const ResourceLayoutDesc& desc);
+
+	ComPtr<ID3D11Device>& GetD3D11Device() noexcept { return mD3D11Device; }
+	ComPtr<ID3D11DeviceContext>& GetD3D11ImmediateContext() noexcept { return mD3D11ImmediateContext; }
+
+	std::shared_ptr<Swapchain>& GetSwapchain() noexcept { return mSwapChain; }
 
 private:
 	std::vector<std::shared_ptr<GraphicsDeviceObject>> mDeviceObjects;

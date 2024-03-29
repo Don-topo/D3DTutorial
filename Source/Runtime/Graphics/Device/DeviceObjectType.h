@@ -1,6 +1,6 @@
 #pragma once
 
-enum class RUNTIME_API DeviceObjectType
+enum class DeviceObjectType
 {
 	Swapchain,
 	Framebuffer,

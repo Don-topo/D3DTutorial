@@ -2,7 +2,7 @@
 
 #include <Runtime/Core/Core.h>
 
-struct GraphicsDeviceDesc
+struct FramebufferDesc
 {
 
 };

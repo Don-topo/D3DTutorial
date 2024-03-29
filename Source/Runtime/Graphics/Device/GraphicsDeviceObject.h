@@ -6,7 +6,7 @@
 
 class GraphicsDevice;
 
-class RUNTIME_API GraphicsDeviceObject
+class GraphicsDeviceObject
 {
 public:
 	GraphicsDeviceObject() = default;
@@ -14,7 +14,7 @@ public:
 	GraphicsDeviceObject& operator=(const GraphicsDeviceObject&) = delete;
 	virtual ~GraphicsDeviceObject() = default;
 
-	virtual GraphicsDeviceObject GetDeviceType() noexcept = 0;
+	virtual DeviceObjectType GetDeviceType() noexcept = 0;
 	std::shared_ptr<GraphicsDevice>& GetOwnerDevice() noexcept { return mOwnerDevice; }
 
 protected:
