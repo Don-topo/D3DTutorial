@@ -16,7 +16,6 @@ using namespace DirectX;
 class GraphicsDeviceObject;
 class Swapchain;
 class Framebuffer;
-class FramebufferView;
 class Texture;
 class TextureView;
 class Shader;
@@ -28,7 +27,6 @@ class ResourceLayout;
 
 struct SwapchainDesc;
 struct FramebufferDesc;
-struct FramebufferViewDesc;
 struct TextureDesc;
 struct TextureViewDesc;
 struct ShaderDesc;
@@ -48,7 +46,6 @@ public:
 
 	std::shared_ptr<Swapchain> CreateSwapchain(const SwapchainDesc& desc);
 	std::shared_ptr<Framebuffer> CreateFramebuffer(const FramebufferDesc& desc);
-	std::shared_ptr<FramebufferView> CreateFramebufferView(const FramebufferViewDesc& desc);
 	std::shared_ptr<Texture> CreateTexture(const TextureDesc& desc);
 	std::shared_ptr<TextureView> CreateTextureView(const TextureViewDesc& desc);
 	std::shared_ptr<Shader> CreateShader(const ShaderDesc& desc);

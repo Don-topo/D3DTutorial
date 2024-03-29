@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include <Runtime/Core/Core.h>
 #include <Runtime/Graphics/Device/DeviceObjectType.h>
 
 class GraphicsDevice;
