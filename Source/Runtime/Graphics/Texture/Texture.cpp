@@ -3,7 +3,7 @@
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
 #include <Runtime/Graphics/Texture/TextureUtils.h>
 
-Texture::Texture(std::shared_ptr<GraphicsDevice>& device, const TextureDesc& desc) : mTextureSize(desc.TextureSize), mFormat(desc.Format),
+Texture::Texture(std::shared_ptr<GraphicsDevice> device, const TextureDesc& desc) : mTextureSize(desc.TextureSize), mFormat(desc.Format),
 mMipLevels(desc.MipLevels), mArraySize(desc.ArraySize), mSampleCount(desc.SampleCount), mSampleQuality(desc.SampleQuality)
 {
 	mOwnerDevice = device;
@@ -29,7 +29,7 @@ mMipLevels(desc.MipLevels), mArraySize(desc.ArraySize), mSampleCount(desc.Sample
 	DEV_ASSERT(SUCCEEDED(device->GetD3D11Device()->CreateTexture2D(&textureDesc, &subresourceData, mTexture.GetAddressOf())), "Texture", "Failed to create texture");
 }
 
-Texture::Texture(std::shared_ptr<GraphicsDevice>& device)
+Texture::Texture(std::shared_ptr<GraphicsDevice> device)
 {
 	mOwnerDevice = device;
 

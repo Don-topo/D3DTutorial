@@ -12,8 +12,8 @@ class Texture : public GraphicsDeviceObject
 {
 	friend class Swapchain;
 public:
-	Texture(std::shared_ptr<GraphicsDevice>& device, const TextureDesc& desc);
-	Texture(std::shared_ptr<GraphicsDevice>& device);
+	Texture(std::shared_ptr<GraphicsDevice> device, const TextureDesc& desc);
+	Texture(std::shared_ptr<GraphicsDevice> device);
 	virtual ~Texture() override = default;
 
 	virtual DeviceObjectType GetDeviceType() noexcept override { return DeviceObjectType::Texture; }

@@ -3,6 +3,8 @@
 #include <Runtime/Graphics/Swapchain/Swapchain.h>
 #include <Runtime/Graphics/Framebuffer/Framebuffer.h>
 
+#include <Runtime/Graphics/Shader/Shader.h>
+
 int main()
 {	
 	auto window = std::make_shared<Window>();
@@ -24,6 +26,14 @@ int main()
 
 	const float clearColor[] = { 0.5f, 0.2f, 0.6f, 1.0f };
 
+	ShaderDesc shaderDesc = {};
+	shaderDesc.Type = ShaderType::VERTEX_SHADER;
+	shaderDesc.EntryPoint = "vs_main";
+	shaderDesc.ShaderName = "ObjectVertexShader";
+	shaderDesc.ShaderModel = "vs_5_0";
+
+	auto shader = device->CreateShader(shaderDesc);
+
 	while (window->IsOpen())
 	{
 		window->ProcessMessage();
@@ -31,5 +41,6 @@ int main()
 		device->GetD3D11ImmediateContext()->ClearRenderTargetView(framebuffer->GetColorTextureView().Get(), clearColor);
 		swapchain->Present();
 	}
+
 	return 0;
 }

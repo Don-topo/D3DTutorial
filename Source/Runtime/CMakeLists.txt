@@ -10,7 +10,7 @@ FetchContent_MakeAvailable(stbi)
 # CREATE EXECUTABLE
 file(GLOB_RECURSE SUBDIRECTORIES "${CMAKE_SOURCE_DIR}/Source/Runtime/*.h" "${CMAKE_SOURCE_DIR}/Source/Runtime/*.cpp")
 source_group("Runtime" "${CMAKE_SOURCE_DIR}/Source/Runtime" ${SUBDIRECTORIES})
-add_library ("Runtime" STATIC main.cpp ${SUBDIRECTORIES} "Window/Window.h" "Window/Window.cpp" "Core/Core.h" "Core/Core.cpp" "Graphics/Device/GraphicsDevice.cpp" "Graphics/Swapchain/Swapchain.h" "Graphics/Swapchain/Swapchain.cpp" "Graphics/Framebuffer/Framebuffer.h" "Graphics/Framebuffer/Framebuffer.cpp"   "Graphics/Framebuffer/FramebufferDesc.h"   "Graphics/Swapchain/SwapchainDesc.h" "Graphics/Texture/TextureFormat.h" "Graphics/Texture/TextureUtils.h" "Graphics/Texture/Texture.h" "Graphics/Texture/TextureDesc.h" "Graphics/Texture/Texture.cpp" "Graphics/Texture/TextureView.h" "Graphics/Texture/TextureView.cpp" "Graphics/Texture/ShaderResourceViewDimension.h" "Graphics/Texture/TextureViewDesc.h")
+add_library ("Runtime" STATIC main.cpp ${SUBDIRECTORIES} "Window/Window.h" "Window/Window.cpp" "Core/Core.h" "Core/Core.cpp" "Graphics/Device/GraphicsDevice.cpp" "Graphics/Swapchain/Swapchain.h" "Graphics/Swapchain/Swapchain.cpp" "Graphics/Framebuffer/Framebuffer.h" "Graphics/Framebuffer/Framebuffer.cpp"   "Graphics/Framebuffer/FramebufferDesc.h"   "Graphics/Swapchain/SwapchainDesc.h" "Graphics/Texture/TextureFormat.h" "Graphics/Texture/TextureUtils.h" "Graphics/Texture/Texture.h" "Graphics/Texture/TextureDesc.h" "Graphics/Texture/Texture.cpp" "Graphics/Texture/TextureView.h" "Graphics/Texture/TextureView.cpp" "Graphics/Texture/ShaderResourceViewDimension.h" "Graphics/Texture/TextureViewDesc.h" "Graphics/Buffer/GraphicsBuffer.h" "Graphics/Buffer/GraphicsBuffer.cpp" "Graphics/Buffer/GraphicsBufferDesc.h" "Graphics/Buffer/BufferUtils.h" "Graphics/Buffer/BufferUsage.h" "Graphics/Buffer/BufferCPUAccess.h" "Graphics/Buffer/BufferResourceUsage.h" "Graphics/Shader/Shader.h" "Graphics/Shader/Shader.cpp" "Graphics/Shader/ShaderDesc.h" "Graphics/Shader/ShaderType.h" "Graphics/Shader/ShaderReader.h" "Core/PlatformDirectory.h")
 
 # INCLUDE DIRECTORIES AND LINK LIBRARIES
 target_include_directories("Runtime" PRIVATE "${CMAKE_SOURCE_DIR}/Source")
@@ -35,3 +35,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 else()
 	message(FATAL_ERROR "Unsupported Compiler")
 endif()
+
+# ROOT DIRECTORY
+add_compile_definitions("SHADER_ROOT=${CMAKE_SOURCE_DIR}/Shaders/")
+add_compile_definitions("WORKING_ROOT=${CMAKE_SOURCE_DIR}")
