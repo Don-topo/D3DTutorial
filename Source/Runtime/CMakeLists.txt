@@ -10,7 +10,7 @@ FetchContent_MakeAvailable(stbi)
 # CREATE EXECUTABLE
 file(GLOB_RECURSE SUBDIRECTORIES "${CMAKE_SOURCE_DIR}/Source/Runtime/*.h" "${CMAKE_SOURCE_DIR}/Source/Runtime/*.cpp")
 source_group("Runtime" "${CMAKE_SOURCE_DIR}/Source/Runtime" ${SUBDIRECTORIES})
-add_library ("Runtime" STATIC main.cpp ${SUBDIRECTORIES} "Window/Window.h" "Window/Window.cpp" "Core/Core.h" "Core/Core.cpp" "Graphics/Device/GraphicsDevice.cpp" "Graphics/Swapchain/Swapchain.h" "Graphics/Swapchain/Swapchain.cpp" "Graphics/Framebuffer/Framebuffer.h" "Graphics/Framebuffer/Framebuffer.cpp"   "Graphics/Framebuffer/FramebufferDesc.h"   "Graphics/Swapchain/SwapchainDesc.h" "Graphics/Texture/TextureFormat.h" "Graphics/Texture/TextureUtils.h")
+add_library ("Runtime" STATIC main.cpp ${SUBDIRECTORIES} "Window/Window.h" "Window/Window.cpp" "Core/Core.h" "Core/Core.cpp" "Graphics/Device/GraphicsDevice.cpp" "Graphics/Swapchain/Swapchain.h" "Graphics/Swapchain/Swapchain.cpp" "Graphics/Framebuffer/Framebuffer.h" "Graphics/Framebuffer/Framebuffer.cpp"   "Graphics/Framebuffer/FramebufferDesc.h"   "Graphics/Swapchain/SwapchainDesc.h" "Graphics/Texture/TextureFormat.h" "Graphics/Texture/TextureUtils.h" "Graphics/Texture/Texture.h" "Graphics/Texture/TextureDesc.h" "Graphics/Texture/Texture.cpp" "Graphics/Texture/TextureView.h" "Graphics/Texture/TextureView.cpp" "Graphics/Texture/ShaderResourceViewDimension.h" "Graphics/Texture/TextureViewDesc.h")
 
 # INCLUDE DIRECTORIES AND LINK LIBRARIES
 target_include_directories("Runtime" PRIVATE "${CMAKE_SOURCE_DIR}/Source")

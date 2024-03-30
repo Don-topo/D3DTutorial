@@ -2,6 +2,7 @@
 
 #include <Runtime/Core/Core.h>
 #include <Runtime/Graphics/Texture/TextureFormat.h>
+#include <Runtime/Graphics/Texture/ShaderResourceViewDimension.h>
 
 #include <d3d11.h>
 
@@ -125,6 +126,155 @@ public:
 			return DXGI_FORMAT_UNKNOWN;
 		}
 	}
+
+	static D3D11_SRV_DIMENSION GetSRVDimension(ShaderResourceViewDimension srvDimension) 
+	{
+		switch (srvDimension) {
+		case ShaderResourceViewDimension::UNKNOWN:
+			return D3D11_SRV_DIMENSION_UNKNOWN;
+		case ShaderResourceViewDimension::BUFFER:
+			return D3D11_SRV_DIMENSION_BUFFER;
+		case ShaderResourceViewDimension::TEXTURE1D:
+			return D3D11_SRV_DIMENSION_TEXTURE1D;
+		case ShaderResourceViewDimension::TEXTURE1D_ARRAY:
+			return D3D11_SRV_DIMENSION_TEXTURE1DARRAY;
+		case ShaderResourceViewDimension::TEXTURE2D:
+			return D3D11_SRV_DIMENSION_TEXTURE2D;
+		case ShaderResourceViewDimension::TEXTURE2D_ARRAY:
+			return D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
+		case ShaderResourceViewDimension::TEXTURE2D_MS:
+			return D3D11_SRV_DIMENSION_TEXTURE2DMS;
+		case ShaderResourceViewDimension::TEXTURE2D_MS_ARRAY:
+			return D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY;
+		case ShaderResourceViewDimension::TEXTURE3D:
+			return D3D11_SRV_DIMENSION_TEXTURE3D;
+		case ShaderResourceViewDimension::TEXTURE_CUBE:
+			return D3D11_SRV_DIMENSION_TEXTURECUBE;
+		case ShaderResourceViewDimension::TEXTURE_CUBE_ARRAY:
+			return D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
+		default:
+			return D3D11_SRV_DIMENSION_UNKNOWN;
+		}
+	}
+
+	static uint32 GetTextureFormatSize(TextureFormat format)
+	{
+		switch (format) {
+		case TextureFormat::UNKNOWN:
+			return 0;
+		case TextureFormat::RGBA32_TYPELESS:
+			return 16;
+		case TextureFormat::RGBA32_FLOAT:
+			return 16;
+		case TextureFormat::RGBA32_UNSIGNED_INT:
+			return 16;
+		case TextureFormat::RGBA32_SIGNED_INT:
+			return 16;
+		case TextureFormat::RGB32_TYPELESS:
+			return 12;
+		case TextureFormat::RGB32_FLOAT:
+			return 12;
+		case TextureFormat::RGB32_UNSIGNED_INT:
+			return 12;
+		case TextureFormat::RGB32_SIGNED_INT:
+			return 12;
+		case TextureFormat::RGBA16_TYPELESS:
+			return 8;
+		case TextureFormat::RGBA16_FLOAT:
+			return 8;
+		case TextureFormat::RGBA16_UNSIGNED_NORMALIZED:
+			return 8;
+		case TextureFormat::RGBA16_UNSIGNED_INT:
+			return 8;
+		case TextureFormat::RGBA16_SIGNED_NORMALIZED:
+			return 8;
+		case TextureFormat::RGBA16_SIGNED_INT:
+			return 8;
+		case TextureFormat::RG32_TYPELESS:
+			return 8;
+		case TextureFormat::RG32_FLOAT:
+			return 8;
+		case TextureFormat::RG32_UNSIGNED_INT:
+			return 8;
+		case TextureFormat::RG32_SIGNED_INT:
+			return 8;
+		case TextureFormat::RGBA8_TYPELESS:
+			return 4;
+		case TextureFormat::RGBA8_UNSIGNED_NORMALIZED:
+			return 4;
+		case TextureFormat::RGBA8_UNSIGNED_INT:
+			return 4;
+		case TextureFormat::RGBA8_SIGNED_NORMALIZED:
+			return 4;
+		case TextureFormat::RGBA8_SIGNED_INT:
+			return 4;
+		case TextureFormat::RG16_TYPELESS:
+			return 4;
+		case TextureFormat::RG16_FLOAT:
+			return 4;
+		case TextureFormat::RG16_UNSIGNED_NORMALIZED:
+			return 4;
+		case TextureFormat::RG16_UNSIGNED_INT:
+			return 4;
+		case TextureFormat::RG16_SIGNED_NORMALIZED:
+			return 4;
+		case TextureFormat::RG16_SIGNED_INT:
+			return 4;
+		case TextureFormat::R32_TYPELESS:
+			return 4;
+		case TextureFormat::D32_FLOAT:
+			return 4;
+		case TextureFormat::R32_FLOAT:
+			return 4;
+		case TextureFormat::R32_UNSIGNED_INT:
+			return 4;
+		case TextureFormat::R32_SIGNED_INT:
+			return 4;
+		case TextureFormat::D24_UNSIGNED_NORMALIZED_S8_UNSIGNED_INT:
+			return 4;
+		case TextureFormat::R24_UNSIGNED_NORMALIZED_X8_TYPELESS:
+			return 4;
+		case TextureFormat::RG8_TYPELESS:
+			return 2;
+		case TextureFormat::RG8_UNSIGNED_NORMALIZED:
+			return 2;
+		case TextureFormat::RG8_UNSIGNED_INT:
+			return 2;
+		case TextureFormat::RG8_SIGNED_NORMALIZED:
+			return 2;
+		case TextureFormat::RG8_SIGNED_INT:
+			return 2;
+		case TextureFormat::R16_TYPELESS:
+			return 2;
+		case TextureFormat::R16_FLOAT:
+			return 2;
+		case TextureFormat::D16_UNSIGNED_NORMALIZED:
+			return 2;
+		case TextureFormat::R16_UNSIGNED_NORMALIZED:
+			return 2;
+		case TextureFormat::R16_UNSIGNED_INT:
+			return 2;
+		case TextureFormat::R16_SIGNED_NORMALIZED:
+			return 2;
+		case TextureFormat::R16_SIGNED_INT:
+			return 2;
+		case TextureFormat::R8_TYPELESS:
+			return 1;
+		case TextureFormat::R8_UNSIGNED_NORMALIZED:
+			return 1;
+		case TextureFormat::R8_UNSIGNED_INT:
+			return 1;
+		case TextureFormat::R8_SIGNED_NORMALIZED:
+			return 1;
+		case TextureFormat::R8_SIGNED_INT:
+			return 1;
+		case TextureFormat::A8_UNSIGNED_NORMALIZED:
+			return 1;
+		default:
+			return 0;
+		}
+	}
+
 
 private:
 

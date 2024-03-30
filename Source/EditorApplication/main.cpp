@@ -18,7 +18,7 @@ int main()
 
 	FramebufferDesc framebufferDesc = {};
 	framebufferDesc.ColorAttachmentFormat = swapchainDesc.SwapchainFormat;
-	framebufferDesc.ColorTexture = swapchain->GetBackBuffer();
+	framebufferDesc.pColorAttachment = swapchain->GetBackTexture();
 
 	auto framebuffer = device->CreateFramebuffer(framebufferDesc);
 

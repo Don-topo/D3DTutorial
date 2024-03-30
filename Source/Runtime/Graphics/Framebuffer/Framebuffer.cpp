@@ -2,11 +2,12 @@
 
 #include <Runtime/Graphics/Texture/TextureUtils.h>
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
+#include <Runtime/Graphics/Texture/Texture.h>
 
 Framebuffer::Framebuffer(std::shared_ptr<GraphicsDevice> device, const FramebufferDesc& desc)
 {
 	mOwnerDevice = device;
-	mColorTexture = desc.ColorTexture;
+	mColorTexture = desc.pColorAttachment->GetTexture();
 
 	D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
 	rtvDesc.Format = TextureUtils::GetTextureFormat(desc.ColorAttachmentFormat);

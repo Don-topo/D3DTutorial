@@ -4,6 +4,7 @@
 #include <Runtime/Graphics/Device/GraphicsDevice.h>
 
 #include <Runtime/Graphics/Texture/TextureUtils.h>
+#include <Runtime/Graphics/Texture/Texture.h>
 
 Swapchain::Swapchain(std::shared_ptr<GraphicsDevice> device, const SwapchainDesc& desc)
 {
@@ -31,9 +32,18 @@ Swapchain::Swapchain(std::shared_ptr<GraphicsDevice> device, const SwapchainDesc
 	DEV_ASSERT(SUCCEEDED(mDXGIAdapter->GetParent(IID_PPV_ARGS(&mDXGIFactory))), "Swapchain", "Failed to get factory from adapter");
 	DEV_ASSERT(SUCCEEDED(mDXGIFactory->CreateSwapChain(device->GetD3D11Device().Get(), &swapchainDesc, &mSwapchain)), "Swapchain", "Failed to create swapchain");
 
-	DEV_ASSERT(SUCCEEDED(mSwapchain->GetBuffer(0, IID_PPV_ARGS(&mBackBuffer))), "Swapchain", "Failed to get backbuffer from swapchain");
+	mBackTexture = new Texture(device);
+	ComPtr<ID3D11Texture2D> backTextureD3D11;
+	DEV_ASSERT(SUCCEEDED(mSwapchain->GetBuffer(0, IID_PPV_ARGS(&backTextureD3D11))), "Swapchain", "Failed to create back buffer from swapchain");
+	mBackTexture->SetFrameTexture(backTextureD3D11);
 
 	DEV_LOG(TE_VERBOSE, "Swapchain", "Created swapchain successfully.");
+}
+
+Swapchain::~Swapchain()
+{
+	delete mBackTexture;
+	mBackTexture = nullptr;
 }
 
 void Swapchain::Present()

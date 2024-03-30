@@ -9,12 +9,10 @@
 #include <wrl.h>
 
 using Microsoft::WRL::ComPtr;
-
+class Texture;
 
 struct FramebufferDesc
 {
 	TextureFormat ColorAttachmentFormat;
-
-	ComPtr<ID3D11Texture2D> ColorTexture;
-	
+	Texture* pColorAttachment;
 };

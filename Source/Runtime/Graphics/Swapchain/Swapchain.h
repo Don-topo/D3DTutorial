@@ -8,20 +8,21 @@
 #include <wrl.h>
 
 using Microsoft::WRL::ComPtr;
+class Texture;
 
 class Swapchain : public GraphicsDeviceObject
 {
 public:
 	Swapchain(std::shared_ptr<GraphicsDevice> device, const SwapchainDesc& desc);
-	virtual ~Swapchain() override = default;
+	virtual ~Swapchain() override;
 
 	void Present();
 
-	ComPtr<ID3D11Texture2D> GetBackBuffer() { return mBackBuffer; }
+	Texture* GetBackTexture() { return mBackTexture; }
 	virtual DeviceObjectType GetDeviceType() noexcept override { return DeviceObjectType::Swapchain; }
 
 private:
-	ComPtr<ID3D11Texture2D> mBackBuffer;
+	Texture* mBackTexture;
 	ComPtr<IDXGISwapChain> mSwapchain;
 
 	ComPtr<IDXGIDevice> mDXGIDevice;
