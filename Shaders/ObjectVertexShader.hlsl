@@ -1,35 +1,20 @@
-struct vertexOut
+struct vOut
 {
     float4 pos : SV_POSITION;
-    float2 uv : TEXCOORD;
-    float3 normal : NORMAL;
-    float3 worldPos : WORLD_POSITION;
+    float4 color : COLOR0;
 };
 
-struct vertexIn
+struct vIn
 {
     float3 pos : POSITION;
-    float2 uv : TEXCOORD;
-    float3 normal : NORMAL;
+    float4 color : COLOR;
 };
 
-cbuffer cbPerObject : register(b0)
+vOut vs_main(vIn input)
 {
-    matrix world;
-    matrix view;
-    matrix projection;
-}
-
-vertexOut vs_main(vertexIn input)
-{
-    vertexOut output;
-    
-    output.pos = mul(float4(input.pos, 1.0f), world);
-    output.pos = mul(output.pos, view);
-    output.pos = mul(output.pos, projection);
-    output.uv = input.uv;
-    output.normal = normalize(mul(float4(input.normal, 0.0f), world).xyz);
-    output.worldPos = mul(float4(input.pos, 1.0f), world).xyz;
+    vOut output;    
+    output.pos = float4(input.pos, 1.0f);
+    output.color = input.color;
     
     return output;
 }

@@ -30,6 +30,8 @@ public:
 	const std::string& GetShaderName() const noexcept { return mShaderName; }
 	const std::string& GetShaderModel() const noexcept { return mShaderModel; }
 
+	ComPtr<ID3DBlob> GetShaderBlob() const noexcept { return mShaderBlob; }
+
 private:
 	ComPtr<ID3D11VertexShader> mVertexShader;
 	ComPtr<ID3D11DomainShader> mDomainShader;

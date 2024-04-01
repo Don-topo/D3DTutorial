@@ -1,5 +1,7 @@
 #include "Window.h"
 
+#include <Runtime/Graphics/Swapchain/Swapchain.h>
+
 Window::Window()
 {
 	mWindowSize = { 1280, 720 };
@@ -10,17 +12,14 @@ Window::Window()
 
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-	/*if (mIsFullScreen) {
-		mWindow = glfwCreateWindow(mWindowSize.x, mWindowSize.y, mTitle.c_str(), glfwGetPrimaryMonitor(), nullptr);
-	}
-	else
-	{*/
-		mWindow = glfwCreateWindow(mWindowSize.x, mWindowSize.y, mTitle.c_str(), nullptr, nullptr);
-	//}
+	mWindow = glfwCreateWindow(mWindowSize.x, mWindowSize.y, mTitle.c_str(), nullptr, nullptr);
+	
+	DEV_ASSERT(mWindow, "Window", "Failed to create window.");
+
+	DEV_LOG(TE_VERBOSE, "Window", "Created window successfully.");
 }
 
 void Window::ProcessMessage()
 {
-	//glfwSwapBuffers(mWindow);
 	glfwPollEvents();
 }

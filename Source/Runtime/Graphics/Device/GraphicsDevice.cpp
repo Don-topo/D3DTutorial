@@ -4,14 +4,24 @@
 
 #include <Runtime/Graphics/Framebuffer/Framebuffer.h>
 #include <Runtime/Graphics/Framebuffer/FramebufferDesc.h>
+
 #include <Runtime/Graphics/Swapchain/Swapchain.h>
 #include <Runtime/Graphics/Swapchain/SwapchainDesc.h>
+
 #include <Runtime/Graphics/Texture/Texture.h>
 #include <Runtime/Graphics/Texture/TextureDesc.h>
+
 #include <Runtime/Graphics/Texture/TextureView.h>
 #include <Runtime/Graphics/Texture/TextureViewDesc.h>
+
 #include <Runtime/Graphics/Shader/Shader.h>
 #include <Runtime/Graphics/Shader/ShaderDesc.h>
+
+#include <Runtime/Graphics/Pipeline/Pipeline.h>
+
+#include <Runtime/Graphics/Sampler/Sampler.h>
+
+#include <Runtime/Graphics/Buffer/GraphicsBuffer.h>
 
 GraphicsDevice::GraphicsDevice(const GraphicsDeviceDesc& desc)
 {
@@ -54,4 +64,25 @@ std::shared_ptr<Shader> GraphicsDevice::CreateShader(const ShaderDesc& desc)
 	auto shader = std::make_shared<Shader>(shared_from_this(), desc);
 	mDeviceObjects.push_back(shader);
 	return shader;
+}
+
+std::shared_ptr<Pipeline> GraphicsDevice::CreatePipeline(const PipelineDesc& desc)
+{
+	auto pipeline = std::make_shared<Pipeline>(shared_from_this(), desc);
+	mDeviceObjects.push_back(pipeline);
+	return pipeline;
+}
+
+std::shared_ptr<Sampler> GraphicsDevice::CreateSampler(const SamplerDesc& desc)
+{
+	auto sampler = std::make_shared<Sampler>(shared_from_this(), desc);
+	mDeviceObjects.push_back(sampler);
+	return sampler;
+}
+
+std::shared_ptr<GraphicsBuffer> GraphicsDevice::CreateGraphicsBuffer(const GraphicsBufferDesc& desc)
+{
+	auto graphicsBuffer = std::make_shared<GraphicsBuffer>(shared_from_this(), desc);
+	mDeviceObjects.push_back(graphicsBuffer);
+	return graphicsBuffer;
 }
