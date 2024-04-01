@@ -6,6 +6,7 @@
 #include <Runtime/Graphics/Sampler/Sampler.h>
 #include <Runtime/Graphics/Pipeline/Pipeline.h>
 #include <Runtime/Graphics/Buffer/GraphicsBuffer.h>
+#include <Runtime/Graphics/Command/CommandList.h>
 
 #include <DirectXMath.h>
 using namespace DirectX;
@@ -45,8 +46,6 @@ int main()
 	framebufferDesc.pColorAttachment = swapchain->GetBackTexture();
 
 	auto framebuffer = device->CreateFramebuffer(framebufferDesc);
-
-	const float clearColor[] = { 0.5f, 0.2f, 0.6f, 1.0f };
 
 	ShaderDesc vertexShaderDesc = {};
 	vertexShaderDesc.Type = ShaderType::VERTEX_SHADER;
@@ -157,45 +156,26 @@ int main()
 
 	auto indexBuffer = device->CreateGraphicsBuffer(indexBufferDesc);
 
+	auto commandList = device->CreateCommandList();
+
 	while (window->IsOpen())
 	{
 		window->ProcessMessage();
-
-		device->GetD3D11ImmediateContext()->OMSetRenderTargets(1, framebuffer->GetColorTextureView().GetAddressOf(), framebuffer->GetDepthTextureView().Get());
-
-		device->GetD3D11ImmediateContext()->IASetInputLayout(pipeline->GetInputLayoutObject().Get());
-		float factor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-		device->GetD3D11ImmediateContext()->OMSetBlendState(pipeline->GetBlendObject().Get(), factor, D3D11_APPEND_ALIGNED_ELEMENT);
-		device->GetD3D11ImmediateContext()->OMSetDepthStencilState(pipeline->GetDepthStencilObject().Get(), 0);
-		device->GetD3D11ImmediateContext()->RSSetState(pipeline->GetRasterizerObject().Get());
-		device->GetD3D11ImmediateContext()->IASetPrimitiveTopology(pipeline->GetPrimitiveTopology());
-
 		
-		device->GetD3D11ImmediateContext()->VSSetShader(vertexShader->GetVertexShader().Get(), nullptr, 0);
-		device->GetD3D11ImmediateContext()->PSSetShader(pixelShader->GetPixelShader().Get(), nullptr, 0);
-		device->GetD3D11ImmediateContext()->PSSetSamplers(0, 1, pipeline->GetSamplerObject().GetAddressOf());
+		commandList->BindFrameBuffer(framebuffer);
+		commandList->BindPipeline(pipeline);
+		commandList->BindVertexBuffer({ vertexBuffer });
+		commandList->BindIndexBuffer(indexBuffer);
+		commandList->BindViewPort(window->GetWindowSize());
 
-		uint32 stride = sizeof(VertexData);
-		uint32 offset = 0;
+		const XMFLOAT3 clearColor = { 0.2f, 0.3f, 0.5f };
+		commandList->ClearBuffer(framebuffer, clearColor);
 
-		device->GetD3D11ImmediateContext()->IASetVertexBuffers(0, 1, vertexBuffer->GetBuffer().GetAddressOf(), &stride, &offset);
-		device->GetD3D11ImmediateContext()->IASetIndexBuffer(indexBuffer->GetBuffer().Get(), DXGI_FORMAT_R32_UINT, 0);
+		commandList->DrawIndexed(indices.size(), 0, 0);
 
-		device->GetD3D11ImmediateContext()->ClearDepthStencilView(framebuffer->GetDepthTextureView().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-		device->GetD3D11ImmediateContext()->ClearRenderTargetView(framebuffer->GetColorTextureView().Get(), clearColor);
+		device->ExecuteCommandLists({ commandList });
+		device->Present();
 
-		D3D11_VIEWPORT vp = {};
-		vp.Width = (float)window->GetWindowSize().x;
-		vp.Height = (float)window->GetWindowSize().y;
-		vp.MinDepth = 0.0f;
-		vp.MaxDepth = 1.0f;
-		vp.TopLeftX = 0.0f;
-		vp.TopLeftY = 0.0f;
-
-		device->GetD3D11ImmediateContext()->RSSetViewports(1, &vp);
-		device->GetD3D11ImmediateContext()->DrawIndexed(indices.size(), 0, 0);
-
-		swapchain->Present();
 	}
 
 	return 0;

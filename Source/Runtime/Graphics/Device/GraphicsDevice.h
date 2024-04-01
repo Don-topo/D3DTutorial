@@ -51,14 +51,17 @@ public:
 	std::shared_ptr<Shader> CreateShader(const ShaderDesc& desc);
 	std::shared_ptr<Pipeline> CreatePipeline(const PipelineDesc& desc);
 	std::shared_ptr<Sampler> CreateSampler(const SamplerDesc& desc);
-	std::shared_ptr<CommandList> CreateCommandList(const CommandListDesc& desc);
+	std::shared_ptr<CommandList> CreateCommandList();
 	std::shared_ptr<GraphicsBuffer> CreateGraphicsBuffer(const GraphicsBufferDesc& desc);
-	std::shared_ptr<ResourceLayout> CreateResourceLayout(const ResourceLayoutDesc& desc);
+	std::shared_ptr<ResourceLayout> CreateResourceLayout(const ResourceLayoutDesc& desc) {};
 
 	ComPtr<ID3D11Device>& GetD3D11Device() noexcept { return mD3D11Device; }
 	ComPtr<ID3D11DeviceContext>& GetD3D11ImmediateContext() noexcept { return mD3D11ImmediateContext; }
 
 	std::shared_ptr<Swapchain>& GetSwapchain() noexcept { return mSwapChain; }
+
+	void ExecuteCommandLists(std::vector<std::shared_ptr<CommandList>> commandLists);
+	void Present();
 
 private:
 	std::vector<std::shared_ptr<GraphicsDeviceObject>> mDeviceObjects;
