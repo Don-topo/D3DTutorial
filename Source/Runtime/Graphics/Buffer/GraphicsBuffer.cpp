@@ -11,7 +11,7 @@ GraphicsBuffer::GraphicsBuffer(std::shared_ptr<GraphicsDevice> device, const Gra
 	mResourceUsage = desc.ResourceUsage;
 	mMiscFlags = desc.MiscFlags;
 	mSizeInBytes = desc.SizeInBytes;
-	mStructureByteStride = desc.StructureByteStride;
+	mStructureByteStride = (uint32)desc.StructureByteStride;
 
 	D3D11_BUFFER_DESC bufferDesc;
 

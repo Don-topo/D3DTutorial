@@ -23,7 +23,7 @@ public:
 	ResourceUsage GetResourceUsage() const noexcept { return mResourceUsage; }
 	uint8 GetMiscFlags() const noexcept { return mMiscFlags; }
 	uint32 GetSizeInBytes() const noexcept { return mSizeInBytes; }
-	uint64 GetStructureByteStride() const noexcept { return mStructureByteStride; }
+	uint32 GetStructureByteStride() const noexcept { return mStructureByteStride; }
 
 private:
 	BufferUsage mUsage;
@@ -31,7 +31,7 @@ private:
 	ResourceUsage mResourceUsage;
 	uint8 mMiscFlags;
 	uint32 mSizeInBytes;
-	uint64 mStructureByteStride;
+	uint32 mStructureByteStride;
 
 	ComPtr<ID3D11Buffer> mBuffer;
 

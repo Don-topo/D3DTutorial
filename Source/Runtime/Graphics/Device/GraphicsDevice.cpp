@@ -25,7 +25,7 @@
 
 #include <Runtime/Graphics/Command/CommandList.h>
 
-GraphicsDevice::GraphicsDevice(const GraphicsDeviceDesc& desc)
+GraphicsDevice::GraphicsDevice()
 {
 	DEV_ASSERT(SUCCEEDED(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION,
 		&mD3D11Device, nullptr, &mD3D11ImmediateContext)), "GraphicsDevice", "Failed to createD3D11 device");

@@ -7,31 +7,23 @@
 #include <Runtime/Graphics/Pipeline/Pipeline.h>
 #include <Runtime/Graphics/Buffer/GraphicsBuffer.h>
 #include <Runtime/Graphics/Command/CommandList.h>
+#include <Runtime/Resources/ResourceImporter.h>
+#include <Runtime/Resources/Mesh/Mesh.h>
+#include <Runtime/Resources/Texture/TextureResource.h>
+#include <Runtime/Graphics/GraphicsManager.h>
 
-#include <DirectXMath.h>
-using namespace DirectX;
 
-struct VertexData
+struct CBData
 {
-	XMFLOAT3 Position;
-	XMFLOAT4 Color;
+	XMMATRIX World;
+	XMMATRIX View;
+	XMMATRIX Projection;
 };
-
-std::vector<VertexData> triangle = {
-	{ XMFLOAT3(-0.5f, -0.5f, 0.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)},
-	{ XMFLOAT3(0.0f, 0.5f, 0.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)},
-	{ XMFLOAT3(0.5f, -0.5f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)}
-};
-
-std::vector<uint32> indices = {
-	0, 1, 2
-};
-
 
 int main()
 {	
 	auto window = std::make_shared<Window>();
-	auto device = std::make_shared<GraphicsDevice>(GraphicsDeviceDesc());
+	auto device = GraphicsManager::GetInstance().GetMainDevice();
 
 	SwapchainDesc swapchainDesc = {};
 	swapchainDesc.Window = window;
@@ -81,13 +73,13 @@ int main()
 	auto sampler = device->CreateSampler(samplerDesc);
 
 	InputLayoutDesc inputDesc = {};
-	inputDesc.SemanticNames = { SemanticName::Position, SemanticName::Color };
-	inputDesc.InputFormats = { TextureFormat::RGB32_FLOAT, TextureFormat::RGB32_FLOAT };
-	inputDesc.SemanticIndices = { 0, 0 };
-	inputDesc.InputSlotIndices = { 0, 0 };
-	inputDesc.AlignedByteOffsets = { D3D11_APPEND_ALIGNED_ELEMENT, D3D11_APPEND_ALIGNED_ELEMENT };
-	inputDesc.SlotClasses = { SlotClass::PerVertexData, SlotClass::PerVertexData };
-	inputDesc.InstanceDataSteps = { 0, 0 };
+	inputDesc.SemanticNames = { SemanticName::Position, SemanticName::TexCoord, SemanticName::Normal };
+	inputDesc.InputFormats = { TextureFormat::RGB32_FLOAT, TextureFormat::RGB32_FLOAT, TextureFormat::RGB32_FLOAT };
+	inputDesc.SemanticIndices = { 0, 0, 0 };
+	inputDesc.InputSlotIndices = { 0, 1, 2 };
+	inputDesc.AlignedByteOffsets = { D3D11_APPEND_ALIGNED_ELEMENT, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_APPEND_ALIGNED_ELEMENT };
+	inputDesc.SlotClasses = { SlotClass::PerVertexData, SlotClass::PerVertexData, SlotClass::PerVertexData };
+	inputDesc.InstanceDataSteps = { 0, 0, 0 };
 	inputDesc.PrimitiveMode = PrimitiveMode::TriangleList;
 
 	RasterizerDesc rasterizerDesc = {};
@@ -134,44 +126,61 @@ int main()
 
 	auto pipeline = device->CreatePipeline(pipelineDesc);
 
-	GraphicsBufferDesc vertexBufferDesc = {};
-	vertexBufferDesc.Usage = BufferUsage::VERTEX_BUFFER;
-	vertexBufferDesc.SizeInBytes = sizeof(VertexData) * triangle.size();
-	vertexBufferDesc.StructureByteStride = sizeof(VertexData);
-	vertexBufferDesc.InitialData = triangle.data();
-	vertexBufferDesc.CPUAccess = BufferCPUAccess::NONE;
-	vertexBufferDesc.ResourceUsage = ResourceUsage::DEFAULT;
-	vertexBufferDesc.MiscFlags = 0;
-
-	auto vertexBuffer = device->CreateGraphicsBuffer(vertexBufferDesc);
-
-	GraphicsBufferDesc indexBufferDesc = {};
-	indexBufferDesc.Usage = BufferUsage::INDEX_BUFFER;
-	indexBufferDesc.SizeInBytes = sizeof(uint32) * indices.size();
-	indexBufferDesc.StructureByteStride = sizeof(uint32);
-	indexBufferDesc.InitialData = indices.data();
-	indexBufferDesc.CPUAccess = BufferCPUAccess::NONE;
-	indexBufferDesc.ResourceUsage = ResourceUsage::DEFAULT;
-	indexBufferDesc.MiscFlags = 0;
-
-	auto indexBuffer = device->CreateGraphicsBuffer(indexBufferDesc);
-
 	auto commandList = device->CreateCommandList();
+
+	auto testMesh = std::make_shared<Mesh>();
+	auto testColor = std::make_shared<TextureResource>();
+	auto testNormal = std::make_shared<TextureResource>();
+	ResourceImporter::ReadStaticMeshFile(R"(C:\Users\ruben\Documents\UOC\TFM\Directx12Course\glTF-Sample-Models\2.0\DamagedHelmet\glTF\DamagedHelmet.gltf)", testMesh);
+	ResourceImporter::ReadTextureFile(R"(C:\Users\ruben\Documents\UOC\TFM\Directx12Course\glTF-Sample-Models\2.0\DamagedHelmet\glTF\Default_albedo.jpg)", testColor);
+	ResourceImporter::ReadTextureFile(R"(C:\Users\ruben\Documents\UOC\TFM\Directx12Course\glTF-Sample-Models\2.0\DamagedHelmet\glTF\Default_normal.jpg)", testNormal);
+
+	CBData modelMatrix = {
+		.World = XMMatrixIdentity(),
+		.View = XMMatrixIdentity(),
+		.Projection = XMMatrixIdentity()
+	};
+	GraphicsBufferDesc cbDesc = {};
+	cbDesc.ResourceUsage = ResourceUsage::DYNAMIC;
+	cbDesc.CPUAccess = BufferCPUAccess::WRITE;
+	cbDesc.Usage = BufferUsage::CONSTANT_BUFFER;
+	cbDesc.SizeInBytes = sizeof(CBData);
+	cbDesc.StructureByteStride = sizeof(XMMATRIX);
+	cbDesc.MiscFlags = 0;
+	cbDesc.InitialData = &modelMatrix;
+
+	auto cb = device->CreateGraphicsBuffer(cbDesc);
+
+	XMFLOAT3 pos = { 0.0f, 0.0f, 0.0f };
+	XMFLOAT3 rot = { 90.0f, 0.0f, 0.0f };
+	XMFLOAT3 scale = { 1.0f,1.0f, 1.0 };
 
 	while (window->IsOpen())
 	{
 		window->ProcessMessage();
+
+		rot.y += 0.1f;
+
+		modelMatrix.World = XMMatrixTranspose(XMMatrixScaling(scale.x, scale.y, scale.z) * 
+			XMMatrixRotationRollPitchYaw(XMConvertToRadians(rot.x), XMConvertToRadians(rot.y), XMConvertToRadians(rot.z)) * XMMatrixTranslation(pos.x, pos.y, pos.z));
+		modelMatrix.View = XMMatrixTranspose(XMMatrixLookAtLH({ 0.0f, 0.0f, -3.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }));
+		modelMatrix.Projection = XMMatrixTranspose(XMMatrixPerspectiveFovLH(XMConvertToRadians(74.0f), 
+			(float)window->GetWindowSize().x / (float)window->GetWindowSize().y, 0.1f, 100.0f));
 		
 		commandList->BindFrameBuffer(framebuffer);
 		commandList->BindPipeline(pipeline);
-		commandList->BindVertexBuffer({ vertexBuffer });
-		commandList->BindIndexBuffer(indexBuffer);
+		commandList->BindVertexBuffer({ testMesh->GetPositionBuffer(), testMesh->GetTexCoordBuffer(), testMesh->GetNormalBuffer()});
+		commandList->BindIndexBuffer({ testMesh->GetIndexBuffer()});
 		commandList->BindViewPort(window->GetWindowSize());
+
+		commandList->UpdateDynamicBuffer(cb, &modelMatrix, sizeof(CBData));
+		commandList->BindResources({ testColor->GetTextureView(), testNormal->GetTextureView()}, { sampler }, {}, ShaderStage::PixelShader);
+		commandList->BindResources({}, {}, { cb }, ShaderStage::VertexShader);
 
 		const XMFLOAT3 clearColor = { 0.2f, 0.3f, 0.5f };
 		commandList->ClearBuffer(framebuffer, clearColor);
 
-		commandList->DrawIndexed(indices.size(), 0, 0);
+		commandList->DrawIndexed(testMesh->GetIndices().size(), 0, 0);
 
 		device->ExecuteCommandLists({ commandList });
 		device->Present();

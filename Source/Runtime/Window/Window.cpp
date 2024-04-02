@@ -8,10 +8,10 @@ Window::Window()
 	mPosition = { 0, 0 };
 	mTitle = "Rendering Engine";
 	mIsFullScreen = false;
+
 	DEV_ASSERT(glfwInit(), "Window", "Failed to initialize GLFW.");
 
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 	mWindow = glfwCreateWindow(mWindowSize.x, mWindowSize.y, mTitle.c_str(), nullptr, nullptr);
 	
 	DEV_ASSERT(mWindow, "Window", "Failed to create window.");

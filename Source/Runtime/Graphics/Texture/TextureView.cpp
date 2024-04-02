@@ -6,7 +6,7 @@
 #include <Runtime/Graphics/Texture/Texture.h>
 
 TextureView::TextureView(std::shared_ptr<GraphicsDevice> device, const TextureViewDesc& desc) : mTexture(desc.pTexture->GetTexture()),
-mFormat(desc.format), mSRVDimension(desc.SRVDimension), mMostDetailedMip(desc.MostDetailedMip), mMipLevels(desc.MipLevels)
+mFormat(desc.Format), mSRVDimension(desc.SRVDimension), mMostDetailedMip(desc.MostDetailedMip), mMipLevels(desc.MipLevels)
 {
 	mOwnerDevice = device;
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};

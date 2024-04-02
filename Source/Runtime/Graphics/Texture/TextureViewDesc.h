@@ -9,7 +9,7 @@ class Texture;
 
 struct TextureViewDesc
 {
-	TextureFormat format;
+	TextureFormat Format;
 	ShaderResourceViewDimension SRVDimension;
 	uint32 MostDetailedMip;
 	uint32 MipLevels;

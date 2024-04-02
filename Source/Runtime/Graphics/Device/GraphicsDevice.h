@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Runtime/Graphics/Device/GraphicsDeviceDesc.h>
-
 #include <memory>
 #include <vector>
 
@@ -39,7 +37,7 @@ struct ResourceLayoutDesc;
 class GraphicsDevice : public std::enable_shared_from_this<GraphicsDevice>
 {
 public:
-	GraphicsDevice(const GraphicsDeviceDesc& desc);
+	GraphicsDevice();
 	GraphicsDevice(const GraphicsDevice&) = delete;
 	GraphicsDevice& operator=(const GraphicsDevice&) = delete;
 	~GraphicsDevice() = default;
