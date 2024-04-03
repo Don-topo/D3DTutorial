@@ -31,6 +31,7 @@ void Application::Run()
 {
 	mWindow->ProcessMessage();
 	mCommandList->BindFrameBuffer(mFramebuffer);
+	mCommandList->BindViewPort(WindowManager::GetInstance().GetWindow()->GetWindowSize());
 	mCommandList->ClearBuffer(mFramebuffer, { 0.2f, 0.3f, 0.5f });
 }
 
