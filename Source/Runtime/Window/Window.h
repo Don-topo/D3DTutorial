@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Runtime/Core/Core.h>
-#include <Runtime/Graphics/Swapchain/Swapchain.h>
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
@@ -28,9 +27,6 @@ public:
 	GLFWwindow* GetWindowHandle() noexcept { return mWindow; }
 	HWND GetNativeWindowHandle() noexcept { return glfwGetWin32Window(mWindow); }
 
-	void SetSwapchain(std::shared_ptr<Swapchain> swapchain) { mSwapchain = swapchain; }
-	Swapchain* GetSwapChain() { return mSwapchain.get(); }
-
 	bool IsOpen() noexcept { return !glfwWindowShouldClose(mWindow); }
 	bool IsFullScreen() const noexcept { return mIsFullScreen; }
 
@@ -41,5 +37,4 @@ private:
 	GLFWwindow* mWindow;
 	bool mIsFullScreen;
 
-	std::shared_ptr<Swapchain> mSwapchain;
 };
