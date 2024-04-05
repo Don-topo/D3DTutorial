@@ -36,6 +36,8 @@ public:
 
 	D3D11_PRIMITIVE_TOPOLOGY GetPrimitiveTopology();
 
+	void SetPrimitiveMode(PrimitiveMode mode) { mInputLayout.PrimitiveMode = mode; }
+
 private:
 	void CreateDepthStencilState();
 	void CreateRasterizerState();
